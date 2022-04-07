@@ -2,29 +2,33 @@ import { StyleSheet, Image, useWindowDimensions } from "react-native";
 
 import { Layout, Text, Button } from "@ui-kitten/components";
 import React from "react";
-import { bulbasaur } from "../store/mockDataStore";
 import { useDispatch, useSelector } from "react-redux";
-import { increment } from "../features/CounterSlice";
 import { useRoute } from "@react-navigation/native";
-
-const singlePokemon = bulbasaur;
+import { useGetPokemonByNameQuery } from "../api/slice/pokemon.slice";
 
 const Pokemon = () => {
   const dispatch = useDispatch();
-  const { count } = useSelector((state) => state?.counter);
+  // const { count } = useSelector((state) => state?.counter);
   const { height, width } = useWindowDimensions();
   const route = useRoute();
   const { search } = route.params;
+
+  // rtk
+  const { data, error, isLoading } = useGetPokemonByNameQuery(`${search}`);
+
+  if (isLoading) return <Text>Loading</Text>;
+  if (error) return <Text>{error.message}</Text>;
+
   return (
     <Layout style={styles.container}>
-      <Text>{singlePokemon.name}</Text>
+      <Text>{data.name}</Text>
       <Image
         style={[
           styles.pokemonImage,
           { height: height * 0.5, width: width * 0.5 },
         ]}
         source={{
-          uri: singlePokemon.sprites.front_default,
+          uri: data.sprites.front_default,
         }}
       />
 
@@ -42,5 +46,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 
-  pokemonImage: {},
+  pokemonImage: {
+    resizeMode: "contain",
+  },
 });
