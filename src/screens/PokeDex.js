@@ -6,7 +6,6 @@ import { Button, Layout, Text, Input, Icon } from "@ui-kitten/components";
 const PokeDex = () => {
   const navigation = useNavigation();
   const [pokeName, setPokeName] = useState("");
-  const changeScreenWithData = ({ data }) => {};
   return (
     <Layout style={styles.container}>
       <Text category={"h2"} style={styles.header}>
