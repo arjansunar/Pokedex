@@ -1,4 +1,4 @@
 import Pokemon from "./Pokemon";
-import PokemonList from "./PokemonList";
+import PokeDex from "./PokeDex";
 
-export { Pokemon, PokemonList };
+export { Pokemon, PokeDex };
