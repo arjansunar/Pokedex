@@ -1,16 +1,23 @@
 import React from "react";
 import * as eva from "@eva-design/eva";
 import { ApplicationProvider, Layout, Text } from "@ui-kitten/components";
-import Pokemon from "./src/screens/Pokemon";
+import { Pokemon, PokemonList } from "./src/screens";
+import { Provider } from "react-redux";
+import { store } from "./src/store";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-const HomeScreen = () => (
-  <Layout style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-    <Text category="h1">HOME</Text>
-  </Layout>
-);
+const Stack = createNativeStackNavigator();
 
 export default () => (
-  <ApplicationProvider {...eva} theme={eva.light}>
-    <Pokemon />
-  </ApplicationProvider>
+  <Provider store={store}>
+    <ApplicationProvider {...eva} theme={eva.light}>
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen name="Home" component={PokemonList} />
+          <Stack.Screen name="Pokemon" component={Pokemon} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </ApplicationProvider>
+  </Provider>
 );
