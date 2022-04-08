@@ -1,7 +1,7 @@
 import { StyleSheet, Image, useWindowDimensions } from "react-native";
 
-import { Layout, Text, Button } from "@ui-kitten/components";
-import React from "react";
+import { Layout, Text, Button, Modal, Card } from "@ui-kitten/components";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useRoute } from "@react-navigation/native";
 import { useGetPokemonByNameQuery } from "../api/slice/pokemon.slice";
@@ -16,8 +16,11 @@ const Pokemon = () => {
   // rtk
   const { data, error, isLoading } = useGetPokemonByNameQuery(`${search}`);
 
+  // ui kitten modal
+  const [visible, setVisible] = useState(false);
+
   if (isLoading) return <Text>Loading</Text>;
-  if (error) return <Text>{error.message}</Text>;
+  if (error?.status) return <Text>error</Text>;
 
   return (
     <Layout style={styles.container}>
@@ -33,6 +36,19 @@ const Pokemon = () => {
       />
 
       <Text>name {search}</Text>
+
+      <Button onPress={() => setVisible(true)}>TOGGLE MODAL</Button>
+
+      <Modal
+        visible={visible}
+        backdropStyle={styles.backdrop}
+        onBackdropPress={() => setVisible(false)}
+      >
+        <Card disabled={true}>
+          <Text>Modal content </Text>
+          <Button onPress={() => setVisible(false)}>DISMISS</Button>
+        </Card>
+      </Modal>
     </Layout>
   );
 };
@@ -45,8 +61,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flex: 1,
   },
-
   pokemonImage: {
     resizeMode: "contain",
+  },
+  backdrop: {
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
 });
